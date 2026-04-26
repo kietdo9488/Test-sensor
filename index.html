@@ -13,10 +13,6 @@
       font-size: 24px;
       margin: 10px 0;
     }
-    #status {
-      font-size: 20px;
-      color: green;
-    }
   </style>
 </head>
 <body>
@@ -25,8 +21,6 @@
   <div class="value">Beta (xoay quanh trục X): <span id="beta">0</span></div>
   <div class="value">Gamma (xoay quanh trục Y): <span id="gamma">0</span></div>
 
-  <h1>Kiểm tra cảm biến tiệm cận</h1>
-  <p id="status">Đang chờ dữ liệu cảm biến...</p>
   <script>
     if (window.DeviceOrientationEvent) {
       window.addEventListener("deviceorientation", function(event) {
@@ -38,31 +32,6 @@
       alert("Thiết bị không hỗ trợ cảm biến con quay.");
     }
 
-    // API cũ: ProximityEvent (chỉ hỗ trợ trên một số trình duyệt Android)
-    window.addEventListener('deviceproximity', function(event) {
-      document.getElementById('status').textContent =
-        `Khoảng cách: ${event.value} cm (tối đa: ${event.max}, tối thiểu: ${event.min})`;
-    });
-
-    // API mới: Generic Sensor API (nếu trình duyệt hỗ trợ)
-    if ('ProximitySensor' in window) {
-      try {
-        let sensor = new ProximitySensor();
-        sensor.start();
-        sensor.onreading = () => {
-          document.getElementById('status').textContent =
-            `Đối tượng gần: ${sensor.near}, khoảng cách: ${sensor.distance} cm`;
-        };
-        sensor.onerror = event => {
-          document.getElementById('status').textContent =
-            `Lỗi cảm biến: ${event.error.name}`;
-        };
-      } catch (error) {
-        document.getElementById('status').textContent = 'Không khởi tạo được cảm biến.';
-      }
-    } else {
-      console.log("Trình duyệt không hỗ trợ ProximitySensor API.");
-    }
   </script>
 </body>
 </html>
